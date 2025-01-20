@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   'array-bracket-newline',
   'array-bracket-spacing',
   'array-element-newline',
@@ -46,19 +46,4 @@ module.exports = [
   'switch-colon-spacing',
   'template-tag-spacing',
   'import/newline-after-import',
-
-  // eslint-plugin-react rules
-  'react/jsx-child-element-spacing',
-  'react/jsx-closing-bracket-location',
-  'react/jsx-closing-tag-location',
-  'react/jsx-curly-spacing',
-  'react/jsx-equals-spacing',
-  'react/jsx-first-prop-newline',
-  'react/jsx-indent',
-  'react/jsx-indent-props',
-  'react/jsx-max-props-per-line',
-  'react/jsx-one-expression-per-line',
-  'react/jsx-space-before-closing',
-  'react/jsx-tag-spacing',
-  'react/jsx-wrap-multilines',
 ];

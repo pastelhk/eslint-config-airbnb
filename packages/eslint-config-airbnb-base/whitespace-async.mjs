@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 
+import eslint from 'eslint';
+import { fileURLToPath } from 'node:url';
+import path from 'path';
+import base from './base.mjs';
+import whitespaceRules from './whitespace-rules.mjs';
+
 const { isArray } = Array;
 const { entries } = Object;
-const { ESLint } = require('eslint');
 
-const baseConfig = require('.');
-const whitespaceRules = require('./whitespaceRules');
+const { ESLint } = eslint;
 
 const severities = ['off', 'warn', 'error'];
 
@@ -20,14 +24,19 @@ function getSeverity(ruleConfig) {
 }
 
 async function onlyErrorOnRules(rulesToError, config) {
-  const errorsOnly = { ...config };
-  const cli = new ESLint({
-    useEslintrc: false,
-    baseConfig: config
-  });
-  const baseRules = (await cli.calculateConfigForFile(require.resolve('./'))).rules;
+  const filename = fileURLToPath(import.meta.url);
+  const dirname = path.dirname(filename);
 
-  entries(baseRules).forEach((rule) => {
+  const cli = new ESLint({
+    baseConfig: config,
+    overrideConfigFile: true,
+    cwd: dirname,
+  });
+
+  const calculatedConfig = await cli.calculateConfigForFile(path.join(dirname, './index.mjs'));
+  const errorsOnly = { rules: {} };
+
+  entries(calculatedConfig.rules).forEach((rule) => {
     const ruleName = rule[0];
     const ruleConfig = rule[1];
     const severity = getSeverity(ruleConfig);
@@ -46,4 +55,5 @@ async function onlyErrorOnRules(rulesToError, config) {
   return errorsOnly;
 }
 
-onlyErrorOnRules(whitespaceRules, baseConfig).then((config) => console.log(JSON.stringify(config)));
+// eslint-disable-next-line no-console
+onlyErrorOnRules(whitespaceRules, base).then((config) => console.log(JSON.stringify(config)));

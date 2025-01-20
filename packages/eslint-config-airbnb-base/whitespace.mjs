@@ -1,15 +1,24 @@
 /* eslint global-require: 0 */
 
+import { execSync } from 'child_process';
+import eslint from 'eslint';
+import { fileURLToPath } from 'node:url';
+import path from 'path';
+import base from './base.mjs';
+import whitespaceRules from './whitespace-rules.mjs';
+
 const { isArray } = Array;
 const { entries } = Object;
-const { CLIEngine } = require('eslint');
+
+const { CLIEngine } = eslint;
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+let overrideConfig;
 
 if (CLIEngine) {
   /* eslint no-inner-declarations: 0 */
-  const whitespaceRules = require('./whitespaceRules');
-
-  const baseConfig = require('.');
-
   const severities = ['off', 'warn', 'error'];
 
   function getSeverity(ruleConfig) {
@@ -23,11 +32,12 @@ if (CLIEngine) {
   }
 
   function onlyErrorOnRules(rulesToError, config) {
-    const errorsOnly = { ...config };
-    const cli = new CLIEngine({ baseConfig: config, useEslintrc: false });
-    const baseRules = cli.getConfigForFile(require.resolve('./')).rules;
+    const cli = new CLIEngine({ baseConfig: config, overrideConfig: true, cwd: dirname });
 
-    entries(baseRules).forEach((rule) => {
+    const baseConfig = cli.getConfigForFile(path.join(dirname, './index.mjs'));
+    const errorsOnly = { rules: {} };
+
+    entries(baseConfig.rules).forEach((rule) => {
       const ruleName = rule[0];
       const ruleConfig = rule[1];
       const severity = getSeverity(ruleConfig);
@@ -46,16 +56,20 @@ if (CLIEngine) {
     return errorsOnly;
   }
 
-  module.exports = onlyErrorOnRules(whitespaceRules, baseConfig);
+  overrideConfig = onlyErrorOnRules(whitespaceRules, base);
 } else {
-  const path = require('path');
-  const { execSync } = require('child_process');
-
   // NOTE: ESLint adds runtime statistics to the output (so it's no longer JSON) if TIMING is set
-  module.exports = JSON.parse(String(execSync(path.join(__dirname, 'whitespace-async.js'), {
-    env: {
-      ...process.env,
-      TIMING: undefined,
-    }
-  })));
+
+  overrideConfig = JSON.parse(
+    String(
+      execSync(path.join(dirname, 'whitespace-async.mjs'), {
+        env: {
+          ...process.env,
+          TIMING: undefined,
+        },
+      }),
+    ),
+  );
 }
+
+export default [...base, overrideConfig];
