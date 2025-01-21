@@ -1,6 +1,6 @@
 {
   "name": "@pasteltech/eslint-config-airbnb",
-  "version": "19.0.4",
+  "version": "20.0.0",
   "description": "Airbnb's ESLint config, following our styleguide",
   "type": "module",
   "main": "index.mjs",
@@ -13,7 +13,7 @@
     "lint": "eslint --report-unused-disable-directives .",
     "pretests-only": "node ./test/requires",
     "tests-only": "babel-tape-runner ./test/test-*.js",
-    "prepublishOnly": "eslint-find-rules --unused --flat-config recommended.mjs && npm test && safe-publish-latest",
+    "prepublishOnly": "eslint-find-rules --unused --flat-config recommended.mjs && npm test",
     "prepublish": "not-in-publish || npm run prepublishOnly",
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
@@ -60,7 +60,7 @@
   },
   "homepage": "https://github.com/airbnb/javascript",
   "dependencies": {
-    "@pasteltech/eslint-config-airbnb-base": "^15.0.0"
+    "@pasteltech/eslint-config-airbnb-base": "^16.0.0"
   },
   "devDependencies": {
     "@babel/runtime": "^7.25.6",
