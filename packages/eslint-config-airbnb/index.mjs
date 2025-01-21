@@ -1,4 +1,4 @@
-import airbnbBase from 'eslint-config-airbnb-base';
+import airbnbBase from '@pasteltech/eslint-config-airbnb-base';
 import hooks from './hooks.mjs';
 import recommended from './recommended.mjs';
 import reactA11y from './rules/react-a11y.mjs';

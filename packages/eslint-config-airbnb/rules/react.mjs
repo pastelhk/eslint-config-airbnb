@@ -1,4 +1,4 @@
-import airbnbBase from 'eslint-config-airbnb-base';
+import airbnbBase from '@pasteltech/eslint-config-airbnb-base';
 import react from 'eslint-plugin-react';
 
 const baseStyleRules = airbnbBase.configs.style.reduce(
