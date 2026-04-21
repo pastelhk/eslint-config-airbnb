@@ -71,8 +71,8 @@
     "tape": "^5.9.0"
   },
   "peerDependencies": {
-    "eslint": "^9.18.0",
-    "eslint-plugin-import": "^2.31.0"
+    "eslint": "^9.18.0 || >= 10",
+    "eslint-plugin-import": "^2.31.0 || >= 3.0.0"
   },
   "engines": {
     "node": "^20.18 || ^22.13 || >= 23.6"
