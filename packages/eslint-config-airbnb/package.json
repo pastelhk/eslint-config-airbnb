@@ -1,6 +1,6 @@
 {
   "name": "@pasteltech/eslint-config-airbnb",
-  "version": "20.0.0",
+  "version": "20.1.0",
   "description": "Airbnb's ESLint config, following our styleguide",
   "type": "module",
   "main": "index.mjs",
